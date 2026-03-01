@@ -1,13 +1,16 @@
-# Tool Use and MCP (Dec 2025)
+# Tool Use and MCP (March 2026)
 
-Tools are the "hands" of an agent. In late 2025, the industry has standardized on the **Model Context Protocol (MCP)**, which replaces fragmented custom tool definitions with a unified, local-first communication layer.
+Tools are the "hands" of an agent. The industry has standardized on the **Model Context Protocol (MCP)**, which replaces fragmented custom tool definitions with a unified, local-first communication layer. MCP saw major updates in 2025-2026, including Streamable HTTP transport and native computer-use tools.
 
 ## Table of Contents
 
 - [The Tool-Use Mechanism](#mechanism)
 - [Model Context Protocol (MCP)](#mcp)
+- [MCP 2.0: Streamable HTTP & Auth (2026)](#mcp-updates)
+- [Computer-Use Tools (Anthropic)](#computer-use)
 - [Defining High-Precision Tools](#precision)
 - [MCP vs. OpenAI Function Calling](#mcp-vs-openai)
+- [Context7: Live Documentation MCP](#context7)
 - [Streaming Tool Calls](#streaming)
 - [Interview Questions](#interview-questions)
 - [References](#references)
@@ -75,8 +78,107 @@ class ExecuteSQL(PydanticModel):
 
 ## Streaming Tool Calls
 
-Late 2025 models support **Partial Tool Speculation**.
-Instead of waiting for the full JSON to generate, the system starts "Prefetching" tool results as soon as the tool name and critical IDs are visible in the stream. This reduces perceived latency by **400-800ms**.
+Frontier models support **Partial Tool Speculation**.
+Instead of waiting for the full JSON to generate, the system starts "prefetching" tool results as soon as the tool name and critical IDs are visible in the stream. This reduces perceived latency by **400-800ms**.
+
+---
+
+## MCP 2.0: Streamable HTTP & Auth (2026)
+
+The MCP 2.0 specification (ratified March 2026) introduced two major changes:
+
+### 1. Streamable HTTP Transport
+Previous MCP used `stdio` or basic HTTP with SSE. MCP 2.0 adds **Streamable HTTP** — a single long-lived HTTP connection that handles bidirectional streaming:
+
+```
+[MCP Client] ←── Streamable HTTP POST /mcp ──→ [MCP Server]
+                  (with SSE response stream)
+```
+
+- Enables MCP servers deployed as cloud microservices (not just local processes)
+- Allows multiple simultaneous tool calls over one connection
+- Backwards compatible with stdio transport
+
+### 2. OAuth 2.1 Authorization
+Remote MCP servers can now require proper auth:
+
+```json
+{
+  "type": "oauth2",
+  "grant_type": "client_credentials",
+  "scopes": ["tools:read", "resources:documents"]
+}
+```
+
+This enables enterprise MCP servers with fine-grained access control per tenant.
+
+---
+
+## Computer-Use Tools (Anthropic)
+
+Claude 3.5+ introduced native **computer-use** tools — the model can directly control a desktop or web browser. These are available via the Anthropic API:
+
+| Tool | Capability | Notes |
+|------|------------|-------|
+| `bash` | Run shell commands | Persistent session across turns |
+| `text_editor` | Read/write/edit files | Supports view, create, str_replace commands |
+| `computer` | Mouse, keyboard, screenshot | Full desktop GUI control |
+
+```python
+import anthropic
+
+client = anthropic.Anthropic()
+
+response = client.beta.messages.create(
+    model="claude-3-7-sonnet-20250219",
+    max_tokens=4096,
+    tools=[
+        {"type": "bash_20250124", "name": "bash"},
+        {"type": "text_editor_20250124", "name": "str_replace_based_edit_tool"},
+        {"type": "computer_20251022", "name": "computer",
+         "display_width_px": 1280, "display_height_px": 800}
+    ],
+    messages=[{"role": "user", "content": "Open Firefox, go to GitHub, and clone my repo."}],
+    betas=["computer-use-2024-10-22", "interleaved-thinking-2025-05-14"]
+)
+```
+
+**Production safety rules for computer-use:**
+1. Always run in a sandboxed VM (Docker + VNC, or E2B cloud)
+2. Screenshot-validate critical state before destructive actions
+3. Use HITL (Human-in-the-Loop) for irreversible actions (file deletion, form submission)
+4. Set `ANTHROPIC_MAX_COMPUTER_TOKENS` to cap runaway loops
+
+---
+
+## Context7: Live Documentation MCP
+
+One of the most practical MCP servers in 2026 is **Context7** — it resolves the "stale training data" problem for coding agents:
+
+```
+# Without Context7:
+Agent: "I'll use langchain's `create_openai_tools_agent` function..."
+(This function was deprecated 6 months ago)
+
+# With Context7 MCP:
+Agent → MCP: list_resources("langchain")
+MCP → Agent: Returns current v0.3.x docs
+Agent: "I'll use the new `create_react_agent` interface..."
+```
+
+**Setup in Claude Desktop / Claude Code:**
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  }
+}
+```
+
+Claude automatically calls `resolve-library-id` and `get-library-docs` before writing code that uses the library.
 
 ---
 
