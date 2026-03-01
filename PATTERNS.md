@@ -43,6 +43,7 @@ Query → Embed → Vector Search → Rerank → Top-K → Generate
 | **Plan-and-Execute** | Multi-step tasks | High |
 | **Multi-Agent Debate** | Verification | High |
 | **Human-in-the-Loop** | High-stakes actions | Medium |
+| **Swarm / Handoff** | Specialised sub-agents | High |
 
 ```
 ┌─────────────────────────────────────────┐
@@ -54,6 +55,40 @@ Query → Embed → Vector Search → Rerank → Top-K → Generate
 │              ↓                          │
 │         [Result]                        │
 └─────────────────────────────────────────┘
+```
+
+---
+
+## Agentic Coding Patterns (2026)
+
+| Pattern | Use Case | Key Tool |
+|---------|----------|----------|
+| **Scaffold → Implement → Verify** | Full feature development | Claude Code / OpenHands |
+| **Read-Plan-Edit** | Refactoring existing code | Claude Code text_editor |
+| **Test-Driven Agent** | High reliability code | Agent writes tests first |
+| **Shadow Review** | PR quality gate | Agent reviews diff before merge |
+| **CLAUDE.md Manifest** | Project context injection | Claude Code CLAUDE.md file |
+| **Sub-Agent Parallelism** | Large codebase changes | Multiple agents per module |
+
+```
+┌────────────────────────────────────────────────────────┐
+│              AGENTIC CODING LOOP                        │
+│                                                        │
+│  Understand → Plan → Implement → Run Tests → Fix       │
+│      ↑             (bash + text_editor tools)    │     │
+│      └──────────── Iterate until tests pass ────┘     │
+│                                                        │
+│  [CLAUDE.md injects: coding style, test commands,     │
+│   forbidden patterns, architecture decisions]          │
+└────────────────────────────────────────────────────────┘
+```
+
+**When to use which tool:**
+```
+Need full autonomy + CLI → Claude Code
+Need open-source + any LLM → OpenHands / Cline
+Need tight IDE integration → Cursor / Windsurf
+Need reproducible pipelines → OpenHands in Docker CI
 ```
 
 ---
@@ -143,6 +178,10 @@ Query → Classify → Route → [Small Model] or [Large Model]
 | **Trust All Output** | Hallucination | Verify, ground |
 | **Single Model** | Single point of failure | Multi-provider |
 | **No Observability** | Blind debugging | Trace everything |
+| **Infinite Agentic Loop** | Agent spins without progress | Max turns + Critic agent |
+| **Over-trusting Computer-Use** | Agent clicks wrong UI elements | Screenshot validation + HITL |
+| **No CLAUDE.md / Manifest** | Agent lacks project context | Always provide coding manifest |
+| **Thinking Mode Always On** | 3-10x cost with no benefit | Gate on complexity classifier |
 
 ---
 

@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/Updated-December%202025-blue.svg" alt="Last Updated"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Updated-March%202026-blue.svg" alt="Last Updated"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License"></a>
   <a href="#-contributing"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
   <a href="https://github.com/ombharatiya/ai-system-design-guide"><img src="https://img.shields.io/github/stars/ombharatiya/ai-system-design-guide?style=social" alt="Stars"></a>
@@ -27,6 +27,10 @@
 | **Build production RAG** | [Chunking](06-retrieval-systems/02-chunking-strategies.md) → [Vector DBs](06-retrieval-systems/04-vector-databases-comparison.md) → [Reranking](06-retrieval-systems/06-reranking-strategies.md) |
 | **Design multi-tenant AI** | [Isolation Patterns](12-security-and-access/04-multi-tenant-rag-isolation.md) → [Case Study](16-case-studies/08-multi-tenant-saas.md) |
 | **Build agents** | [Agent Fundamentals](07-agentic-systems/01-agent-fundamentals.md) → [MCP](07-agentic-systems/03-tool-use-and-mcp.md) → [LangGraph](09-frameworks-and-tools/02-langgraph-orchestration.md) |
+| **Autonomous coding agents** | [Claude Code](09-frameworks-and-tools/09-claude-code.md) → [OpenCoder Landscape](09-frameworks-and-tools/10-opencoderguide.md) |
+| **Pick the right model (2026)** | [Model Taxonomy](02-model-landscape/01-model-taxonomy.md) → [Pricing](02-model-landscape/03-pricing-and-costs.md) |
+| **Evaluate AI in production** | [AI Evals Guide (Phoenix/Langfuse)](ai_evals_comprehensive_study_guide.md) → [AI Evals Guide (LangWatch/Langfuse)](ai_evals_complete_guide_langwatch_langfuse.md) |
+| **Find the best courses to learn AI** | [Recommended Courses & Learning Paths](COURSES.md) |
 
 ---
 
@@ -36,8 +40,8 @@
 
 | This Guide | Printed Books |
 |------------|---------------|
-| December 2025 models (GPT-5.2, Claude Opus 4.5, Gemini 3) | Stuck on GPT-4 |
-| MCP, Agentic RAG, Flow Engineering | Does not exist |
+| March 2026 models (Claude 3.7 Sonnet, GPT-4.5, o3, Gemini 2.0 Flash, Grok 3) | Stuck on GPT-4 |
+| MCP, Claude Code, Agentic RAG, OpenCoder landscape | Does not exist |
 | Real pricing with verification dates | Already wrong |
 | Staff-level interview Q&A | Generic questions |
 
@@ -48,14 +52,14 @@
 ```
 ├── 00-interview-prep/           # Questions, frameworks, exercises
 ├── 01-foundations/              # Transformers, attention, embeddings
-├── 02-model-landscape/          # GPT-5.2, Claude Opus 4.5, Gemini 3, o3, DeepSeek
+├── 02-model-landscape/          # Claude 3.7, GPT-4.5, o3, Gemini 2.0, DeepSeek
 ├── 03-training-and-adaptation/  # Fine-tuning, LoRA, DPO, distillation
 ├── 04-inference-optimization/   # KV cache, PagedAttention, vLLM
-├── 05-prompting-and-context/    # CoT, DSPy, prompt injection defense
+├── 05-prompting-and-context/    # CoT, Extended Thinking, DSPy, prompt injection
 ├── 06-retrieval-systems/        # RAG, chunking, GraphRAG, Agentic RAG
-├── 07-agentic-systems/          # MCP, multi-agent, swarms, evaluation
+├── 07-agentic-systems/          # MCP 2.0, multi-agent, swarms, computer-use
 ├── 08-memory-and-state/         # L1-L3 memory tiers, Mem0, caching
-├── 09-frameworks-and-tools/     # LangGraph, DSPy, LlamaIndex
+├── 09-frameworks-and-tools/     # LangGraph, DSPy, LlamaIndex, Claude Code, OpenCoder
 ├── 10-document-processing/      # Vision-LLM OCR, multimodal parsing
 ├── 11-infrastructure-and-mlops/ # GPU clusters, LLMOps, cost management
 ├── 12-security-and-access/      # RBAC, ABAC, multi-tenant isolation
@@ -63,7 +67,11 @@
 ├── 14-evaluation-and-observability/ # RAGAS, LangSmith, drift detection
 ├── 15-ai-design-patterns/       # Pattern catalog, anti-patterns
 ├── 16-case-studies/             # Real-world architectures with diagrams
-└── GLOSSARY.md                  # Every term defined
+├── GLOSSARY.md                  # Every term defined
+│
+├── ai_evals_comprehensive_study_guide.md      # 🔬 Deep-dive: AI Evals (Phoenix + Langfuse)
+└── ai_evals_complete_guide_langwatch_langfuse.md  # 🔬 Deep-dive: AI Evals (LangWatch + Langfuse)
+└── COURSES.md                   # 🎓 Recommended courses & learning paths
 ```
 
 ---
@@ -84,6 +92,29 @@ Real interview problems with complete solutions and diagrams:
 | [Voice Healthcare](16-case-studies/13-voice-ai-healthcare.md) | Real-time clinical note generation | On-Prem ASR + HIPAA |
 | [Fraud Detection](16-case-studies/14-fraud-detection.md) | 100ms decision with explainability | ML + Rules Hybrid |
 | [Knowledge Management](16-case-studies/15-knowledge-management.md) | 2M docs with access control | Permission-Aware RAG |
+
+---
+
+## 🔬 Bonus Deep-Dive Guides
+
+Two companion guides (3,000+ lines each) covering AI evaluation end-to-end — for Engineers, PMs, and QAs:
+
+| Guide | Platforms Covered | What's Inside |
+|-------|------------------|---------------|
+| [AI Evals: Comprehensive Study Guide](ai_evals_comprehensive_study_guide.md) | Arize Phoenix + Langfuse | LLM-as-a-Judge, RAG eval, multi-turn eval, production safety, statistical correction with `judgy`, 30-day learning path |
+| [AI Evals: LangWatch + Langfuse Guide](ai_evals_complete_guide_langwatch_langfuse.md) | LangWatch + Langfuse | Same syllabus with LangWatch's 40+ built-in evaluators, side-by-side platform comparisons, platform choice guidance |
+
+**Topics covered across both guides:**
+- Tracing and observability setup (Phoenix, LangWatch, Langfuse)
+- Error analysis: open coding → axial coding → failure mode taxonomy
+- Building LLM judges with Train/Dev/Test split and ground truth calibration
+- Code-based evaluators (regex, JSON schema, format validators)
+- RAG-specific evals: faithfulness, context recall, answer relevance
+- Multi-step pipeline evaluation and multi-turn conversation eval
+- Production guardrails, safety monitoring, real-time drift detection
+- Statistical correction with `judgy` library
+- Human annotation best practices and inter-rater reliability
+- Cost/latency optimization for eval pipelines at scale
 
 ---
 
@@ -133,4 +164,4 @@ MIT License. See [LICENSE](LICENSE).
   <a href="https://linkedin.com/in/ombharatiya"><img src="https://img.shields.io/badge/LinkedIn-Connect-0A66C2?logo=linkedin" alt="LinkedIn"></a>
 </p>
 
-<p align="center"><i>Last updated: December 2025</i></p>
+<p align="center"><i>Last updated: March 2026</i></p>
