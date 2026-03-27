@@ -16,14 +16,14 @@ Pretraining is the most computationally expensive phase of building an LLM, wher
 
 ## The Pretraining Objective
 
-Most modern LLMs are **Decoder-only** and use **Causal Language Modeling (CLM)**:
+Most modern LLMs are **Decoder-only**(# claude,llama,GPT are all decoder only models. encoder only-BART by Meta, Vanilla Transformer(Original)) and use **Causal Language Modeling (CLM)**:
 
 ```python
 # Objective: Minimize Cross-Entropy Loss
 Loss = -sum(log P(token_i | token_1, ..., token_{i-1}))
 ```
 
-The model predicts the next token given the context. This simple objective, at scale, leads to emergent reasoning capabilities.
+The model predicts the next token given the context. This simple objective, at scale, leads to emergent reasoning capabilities(Context understanding-> Pattern generalizes->model forms its reasoning).
 
 ---
 
