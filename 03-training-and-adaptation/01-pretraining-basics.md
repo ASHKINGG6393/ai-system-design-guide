@@ -402,11 +402,13 @@ But tons of exposure
 Larger models are powerful but expensive and prone to overfitting early**
 
 **Chinchilla mindset:**
+
 Balance capacity and data
 Avoid wasting training compute
 👉 Good for research
 
 **Inference-optimal mindset:**
+
 Overtrain smaller models
 Minimize inference cost per query
 👉 Good for real-world deployment (think Meta, Microsoft, Amazon)
@@ -437,11 +439,17 @@ Each query → much lighter computation
 👉 Cheap per request
 
 **How does better generalization reduce inference cost**
+
 👉 Important:
+
 It **does NOT directly reduce cost per query**
 
 Instead, it allows:
 
 **A smaller model to perform as well as a bigger one**
+
+One-line intuition
+
+**Better generalization → smaller model is enough → fewer parameters → cheaper inference**
 
 *Next: [Fine-Tuning Strategies](02-fine-tuning-strategies.md)*
