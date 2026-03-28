@@ -94,11 +94,138 @@ This is "Catastrophic Forgetting." Two main mitigations:
 
 ---
 
-## References
-- Hu et al. "LoRA: Low-Rank Adaptation of Large Language Models" (2021)
-- Ouyang et al. "Training language models to follow instructions" (InstructGPT, 2022)
-- Dettmers et al. "QLoRA: Efficient Finetuning of Quantized LLMs" (2023)
+## Doubts
 
+First, recall:
+
+Fine-tuning = updating model weights using new data
+
+What’s the risk?
+
+If we use a high learning rate:
+
+weights change too fast
+model “overwrites” old knowledge
+
+👉 This is called catastrophic forgetting
+
+So why lower LR (~1/10)?
+
+Think of weights as:
+
+“everything the model knows about the world”
+
+Now:
+
+High LR → big updates → like rewriting memory aggressively
+Low LR → small updates → like adding notes without erasing old ones
+Intuition
+
+You’re teaching a finance expert some medical terms:
+
+❌ High LR → forgets finance, becomes confused
+✅ Low LR → adds medical knowledge on top of finance
+
+**High LR → large weight updates → overwriting of existing knowledge → catastrophic forgetting**
+
+**PEFT (LoRA) — “One base model + multiple adapters”**
+
+Traditional fine-tuning
+You copy full model (say 70B)
+Train it for each task
+
+👉 Problem:
+
+Very expensive
+Need separate model for each task
+LoRA idea (simple)
+
+Instead of changing original weights:
+
+👉 We **freeze base model**
+👉 Add small trainable layers (adapters)
+
+Why this is powerful
+Memory efficient
+Fast training
+No overwriting base knowledge
+
+**Catastrophic Forgetting (deep understanding)**
+
+What is it?
+
+When a model learns new data and forgets previously learned knowledge
+
+**Why it happens**
+
+Because:
+
+**Same weights are used for everything**
+**Updating them for new task → overwrites old patterns**
+
+Simple example
+
+Model knows:
+
+English grammar
+
+Now fine-tuned only on:
+
+Legal documents
+
+👉 It may:
+
+**lose casual language ability****
+****become overly formal everywhere**
+
+
+Why it’s “catastrophic”
+
+Because:
+
+Forgetting is not gradual
+It can be sudden and severe
+
+Two main solutions (from your question)
+
+**1. Rehearsal**
+
+Mix:
+
+90% new data
+10% old/general data
+
+👉 Keeps memory alive
+
+**2. PEFT (LoRA)**
+
+Base weights untouched
+New knowledge stored separately
+
+👉 LoRA doesn’t add full layers — it adds low-rank matrices (very small)
+
+So:
+
+original weights = W
+LoRA learns small updates = ΔW
+
+Final behavior:
+
+Effective weight = W + ΔW
+
+But:
+
+**W is frozen
+Only ΔW is trained**
+
+👉 So:
+
+Old knowledge = safe
+New knowledge = added
+Final mental model (remember this)
+
+**Full fine-tuning = rewriting the brain
+LoRA = attaching new modules without touching the brain**
 ---
 
 *Next: [LoRA, QLoRA, and PEFT](03-lora-qlora-peft.md)*
